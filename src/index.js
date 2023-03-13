@@ -1,14 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import "react-day-picker/dist/style.css";
+import AuthContextProvaider from "./Components/Context/AuthContextProvaider/AuthContextProvaider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <AuthContextProvaider>
+    <React.StrictMode>
+      <App />
+      <ToastContainer />
+    </React.StrictMode>
+  </AuthContextProvaider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,0 +1,17 @@
+#nav_bar_wraper {
+  padding: 0 30px;
+}
+#nav_link_wraper .flex {
+  justify-content: center;
+  align-items: center;
+}
+.them_icon {
+  font-size: 1.2rem;
+}
+
+@media screen and (max-width: 768px) {
+  #nav_link_wraper .flex-col {
+    justify-content: center;
+    align-items: unset;
+  }
+}
