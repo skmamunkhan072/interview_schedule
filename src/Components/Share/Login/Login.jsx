@@ -7,15 +7,21 @@ import SmallSpinner from "../SmallSpinner/SmallSpinner";
 import { useToken } from "../../Hooks/UseToken/UseToken";
 
 const Login = () => {
-  const { loading, setLoading, handelLoginUser, handelGoogleSingUpUser, url } =
-    useContext(AuthContext);
+  const {
+    loading,
+    setLoading,
+    handelLoginUser,
+    handelGoogleSingUpUser,
+    url,
+    setUserRole,
+  } = useContext(AuthContext);
   const [errorMessage, SetErrorMessage] = useState("");
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [token] = useToken(email);
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-
+  setUserRole("user");
   // handelUserLogin
   const handelUserLogin = (e) => {
     e.preventDefault();
@@ -36,6 +42,7 @@ const Login = () => {
           progress: undefined,
           theme: "dark",
         });
+        setUserRole("user");
       })
       .catch((error) => {
         const errorCode = error.code;

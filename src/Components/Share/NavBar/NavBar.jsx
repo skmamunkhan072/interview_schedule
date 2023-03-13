@@ -69,7 +69,7 @@ const NavBar = () => {
         }
       });
   };
-
+  console.log(userRole);
   return (
     <div id="nav_bar_wraper relative">
       <Navbar fluid={true} rounded={false}>

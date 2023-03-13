@@ -20,10 +20,19 @@ const AuthContextProvaider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState("user");
-  // console.log(user);
   const [editTaskDataLoad, setEditTaskDataLoad] = useState(null);
-  const [themValue, setThemValue] = useState(false);
+  const [themValue, setThemValue] = useState(true);
   const them = document.documentElement;
+
+  // Them change
+  const changeTheme = () => {
+    setThemValue(!themValue);
+    if (them.classList.value === "dark") {
+      them.classList.value = "light";
+    } else {
+      them.classList.value = "dark";
+    }
+  };
 
   // email & password user create
   const handelUserCreate = (email, password) => {
@@ -66,6 +75,7 @@ const AuthContextProvaider = ({ children }) => {
     userRole,
     setUserRole,
     themValue,
+    changeTheme,
     setThemValue,
     loading,
     setLoading,

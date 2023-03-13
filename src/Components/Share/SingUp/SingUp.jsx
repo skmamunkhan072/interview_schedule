@@ -7,15 +7,21 @@ import { useToken } from "../../Hooks/UseToken/UseToken";
 import SmallSpinner from "../SmallSpinner/SmallSpinner";
 
 const SingUp = () => {
-  const { loading, setLoading, handelUserCreate, updateUser, url } =
-    useContext(AuthContext);
+  const {
+    loading,
+    setLoading,
+    handelUserCreate,
+    updateUser,
+    url,
+    setUserRole,
+  } = useContext(AuthContext);
   const [errorMessage, SetErrorMessage] = useState("");
   const [userEmail, setUserEmail] = useState(null);
   const [token] = useToken(userEmail);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-
+  setUserRole("user");
   //   handel singup
   const handelUsersingUp = (e) => {
     e.preventDefault();
@@ -58,6 +64,7 @@ const SingUp = () => {
                       progress: undefined,
                       theme: "dark",
                     });
+                    setUserRole("user");
                   })
                   .catch((error) => {
                     const errorMessage = error.message;
