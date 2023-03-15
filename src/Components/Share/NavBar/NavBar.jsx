@@ -14,14 +14,13 @@ const NavBar = () => {
   const {
     handelSingOutUser,
     user,
-    setUserRole,
     changeTheme,
     themValue,
-    userRole,
     url,
     userRouteError,
     setUserRouteError,
-
+    userRole,
+    setUserRole,
     setLoading,
   } = useContext(AuthContext);
   const [showDropdrownMenuw, setShowDropdrownMenuw] = useState(false);
@@ -55,29 +54,32 @@ const NavBar = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${url}database-user`, {
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${localStorage.getItem("access_Token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((role) => {
-        console.log(role?.role);
-        if (role?.role) {
-          setDatabaseUser(role?.role);
-          setUserRole(role?.role);
-        }
-        setLoading(false);
-      });
+    if (user) {
+      fetch(`${url}database-user`, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${localStorage.getItem("access_Token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((role) => {
+          console.log(role?.role);
+          if (role?.role) {
+            setDatabaseUser(role?.role);
+            setUserRole(role?.role);
+          }
+          setLoading(false);
+        });
+    }
   }, [user, userRouteError, databaseUser]);
-  console.log(databaseUser);
+  // console.log(databaseUser);
 
   const handelUserLogOut = () => {
     handelSingOutUser()
       .then(() => {
         localStorage.removeItem("access_Token");
         console.log("out");
+        setDatabaseUser("user");
         toast.success("🦄 Sing Out successful!", {
           position: "top-center",
           autoClose: 2000,
@@ -90,7 +92,6 @@ const NavBar = () => {
         });
 
         localStorage.removeItem("access_Token");
-        setUserRole("user");
       })
       .catch((error) => {
         console.log(error);
@@ -112,22 +113,7 @@ const NavBar = () => {
             Home
           </Navbar.Link>
 
-          {databaseUser ? (
-            <>
-              {databaseUser && databaseUser === "admin" && (
-                <>
-                  <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
-                  <Navbar.Link href="/Interview-Mont">
-                    Interview Mont
-                  </Navbar.Link>
-                  <Navbar.Link href="/all-user">All User</Navbar.Link>
-                  <Navbar.Link href="/select-all-interview-user">
-                    Select All Interview User
-                  </Navbar.Link>
-                </>
-              )}
-            </>
-          ) : (
+          {userRole ? (
             <>
               {userRole && userRole === "admin" && (
                 <>
@@ -142,23 +128,23 @@ const NavBar = () => {
                 </>
               )}
             </>
-          )}
-
-          {databaseUser ? (
+          ) : (
             <>
-              {databaseUser && databaseUser === "employer" && (
+              {databaseUser && databaseUser === "admin" && (
                 <>
                   <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
                   <Navbar.Link href="/Interview-Mont">
                     Interview Mont
                   </Navbar.Link>
+                  <Navbar.Link href="/all-user">All User</Navbar.Link>
                   <Navbar.Link href="/select-all-interview-user">
                     Select All Interview User
                   </Navbar.Link>
                 </>
               )}
             </>
-          ) : (
+          )}
+          {userRole ? (
             <>
               {userRole && userRole === "employer" && (
                 <>
@@ -172,21 +158,22 @@ const NavBar = () => {
                 </>
               )}
             </>
-          )}
-          {databaseUser ? (
+          ) : (
             <>
-              {databaseUser && databaseUser === "user" && (
+              {databaseUser && databaseUser === "employer" && (
                 <>
-                  <Navbar.Link href="/interview_schedule">
-                    Interview Schedule
+                  <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
+                  <Navbar.Link href="/Interview-Mont">
+                    Interview Mont
                   </Navbar.Link>
-                  <Navbar.Link href="/booking-interview">
-                    Booking Interview
+                  <Navbar.Link href="/select-all-interview-user">
+                    Select All Interview User
                   </Navbar.Link>
                 </>
               )}
             </>
-          ) : (
+          )}
+          {userRole ? (
             <>
               {userRole && userRole === "user" && (
                 <>
@@ -199,16 +186,45 @@ const NavBar = () => {
                 </>
               )}
             </>
-          )}
-
-          {databaseUser && databaseUser === "requestEmployer" && (
+          ) : (
             <>
-              <Navbar.Link href="/interview_schedule">
-                Interview Schedule
-              </Navbar.Link>
-              <Navbar.Link href="/booking-interview">
-                Booking Interview
-              </Navbar.Link>
+              {databaseUser && databaseUser === "user" && (
+                <>
+                  <Navbar.Link href="/interview_schedule">
+                    Interview Schedule
+                  </Navbar.Link>
+                  <Navbar.Link href="/booking-interview">
+                    Booking Interview
+                  </Navbar.Link>
+                </>
+              )}
+            </>
+          )}
+          {userRole ? (
+            <>
+              {databaseUser && databaseUser === "requestEmployer" && (
+                <>
+                  <Navbar.Link href="/interview_schedule">
+                    Interview Schedule
+                  </Navbar.Link>
+                  <Navbar.Link href="/booking-interview">
+                    Booking Interview
+                  </Navbar.Link>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {databaseUser && databaseUser === "requestEmployer" && (
+                <>
+                  <Navbar.Link href="/interview_schedule">
+                    Interview Schedule
+                  </Navbar.Link>
+                  <Navbar.Link href="/booking-interview">
+                    Booking Interview
+                  </Navbar.Link>
+                </>
+              )}
             </>
           )}
 
@@ -221,14 +237,18 @@ const NavBar = () => {
             </>
           )}
 
-          <div className="cursor-pointer">
-            <Avatar
-              alt="User settings"
-              img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-              rounded={true}
-              onClick={() => setShowDropdrownMenuw(!showDropdrownMenuw)}
-            />
-          </div>
+          {user ? (
+            <div className="cursor-pointer">
+              <Avatar
+                alt="User settings"
+                img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                rounded={true}
+                onClick={() => setShowDropdrownMenuw(!showDropdrownMenuw)}
+              />
+            </div>
+          ) : (
+            ""
+          )}
           {showDropdrownMenuw && (
             <div
               className="block max-w-sm  border border-gray-200 rounded-md shadow bg-gray-50  dark:border-gray-700 dark:bg-gray-700 absolute right-5 top-16"

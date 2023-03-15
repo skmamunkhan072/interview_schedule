@@ -1,11 +1,10 @@
-import React, { useContext, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../Context/AuthContextProvaider/AuthContextProvaider";
 import Error from "../../../Share/Error/Error";
 import Loading from "../../../Share/Loading/Loading";
 
 const AdminRoute = ({ children }) => {
-  const { user, loading, userRole, setLoading, setUserRole, url } =
+  const { user, loading, setLoading, url, userRouteError, userRole } =
     useContext(AuthContext);
 
   // loading

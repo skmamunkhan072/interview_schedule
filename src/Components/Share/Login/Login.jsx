@@ -14,7 +14,7 @@ const Login = () => {
     url,
     userRouteError,
     setUserRouteError,
-    setDatabaseUser,
+
     setUserRole,
   } = useContext(AuthContext);
   const [errorMessage, SetErrorMessage] = useState("");
@@ -34,22 +34,6 @@ const Login = () => {
     handelLoginUser(email, password)
       .then((result) => {
         setEmail(email);
-
-        fetch(`${url}database-user`, {
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `bearer ${localStorage.getItem("access_Token")}`,
-          },
-        })
-          .then((res) => res.json())
-          .then((role) => {
-            console.log(role?.role);
-            if (role?.role) {
-              setDatabaseUser(role?.role);
-              setUserRole(role?.role);
-            }
-            setLoading(false);
-          });
         // setUserRouteError(!userRouteError);
         toast.success("🦄 Login successful!", {
           position: "top-center",

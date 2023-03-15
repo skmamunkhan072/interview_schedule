@@ -10,7 +10,6 @@ const AllUser = () => {
 
   // all user
   useEffect(() => {
-    setLoading(true);
     fetch(`${url}all-user`, {
       headers: {
         "Content-Type": "application/json",

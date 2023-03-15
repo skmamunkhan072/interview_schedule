@@ -24,6 +24,7 @@ const AuthContextProvaider = ({ children }) => {
   const [userRouteError, setUserRouteError] = useState(false);
   const [editTaskDataLoad, setEditTaskDataLoad] = useState(null);
   const [themValue, setThemValue] = useState(true);
+
   const them = document.documentElement;
 
   // Them change

@@ -32,6 +32,16 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      // {
+      //   path: "/dashboard-admin",
+      //   element: (
+      //     <PrivateRoute>
+      //       <AdminRoute>
+      //         <Dashboard />
+      //       </AdminRoute>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
         path: "/Interview-Mont",
         element: (
@@ -42,6 +52,16 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      // {
+      //   path: "/Interview-Mont-admin",
+      //   element: (
+      //     <PrivateRoute>
+      //       <AdminRoute>
+      //         <AllInterviewMont />
+      //       </AdminRoute>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
         path: "/select-all-interview-user",
         element: (
@@ -52,6 +72,16 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      // {
+      //   path: "/select-all-interview-user-admin",
+      //   element: (
+      //     <PrivateRoute>
+      //       <AdminRoute>
+      //         <SelectAllInterviewUser />
+      //       </AdminRoute>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
         path: "/interview_schedule",
         element: (

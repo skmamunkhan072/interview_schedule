@@ -15,7 +15,6 @@ const SingUp = () => {
     url,
     userRouteError,
     setUserRouteError,
-    setDatabaseUser,
     setUserRole,
   } = useContext(AuthContext);
   const [errorMessage, SetErrorMessage] = useState("");
@@ -120,7 +119,6 @@ const SingUp = () => {
       .then((role) => {
         console.log(role?.role);
         if (role?.role) {
-          setDatabaseUser(role?.role);
           setUserRole(role?.role);
         }
         setLoading(false);
