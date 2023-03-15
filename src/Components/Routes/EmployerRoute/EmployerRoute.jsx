@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../Context/AuthContextProvaider/AuthContextProvaider";
 import Error from "../../Share/Error/Error";
 import Loading from "../../Share/Loading/Loading";
 
 const EmployerRoute = ({ children }) => {
-  const { user, loading, userRole } = useContext(AuthContext);
+  const { user, loading, userRole, setLoading, setUserRole, url } =
+    useContext(AuthContext);
 
   // loading
   if ((loading, !userRole)) {

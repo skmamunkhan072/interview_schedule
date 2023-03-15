@@ -4,12 +4,13 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../Context/AuthContextProvaider/AuthContextProvaider";
 
 const AllUser = () => {
-  const { url } = useContext(AuthContext);
+  const { url, loading, setLoading } = useContext(AuthContext);
   const [allUser, setAllUser] = useState([]);
   const [requestEmployerAccept, seTrequestEmployerAccept] = useState(false);
 
   // all user
   useEffect(() => {
+    setLoading(true);
     fetch(`${url}all-user`, {
       headers: {
         "Content-Type": "application/json",
@@ -21,6 +22,9 @@ const AllUser = () => {
         if (users) {
           console.log(users);
           setAllUser(users);
+          setLoading(false);
+        } else {
+          setLoading(false);
         }
       });
   }, [url, requestEmployerAccept]);

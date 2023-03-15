@@ -10,6 +10,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { app } from "../../Firbase/Firbase.config";
+import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -19,7 +20,8 @@ const AuthContextProvaider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [userRole, setUserRole] = useState("user");
+  const [userRole, setUserRole] = useState("");
+  const [userRouteError, setUserRouteError] = useState(false);
   const [editTaskDataLoad, setEditTaskDataLoad] = useState(null);
   const [themValue, setThemValue] = useState(true);
   const them = document.documentElement;
@@ -87,6 +89,8 @@ const AuthContextProvaider = ({ children }) => {
     handelLoginUser,
     editTaskDataLoad,
     setEditTaskDataLoad,
+    userRouteError,
+    setUserRouteError,
   };
 
   return (

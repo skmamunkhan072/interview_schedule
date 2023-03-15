@@ -1,5 +1,5 @@
 import { Avatar, Card, Dropdown, Navbar } from "flowbite-react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./NavBar.css";
 import Logo from "../../../Assets/Img/Logo.png";
 
@@ -14,36 +14,19 @@ const NavBar = () => {
   const {
     handelSingOutUser,
     user,
-    loading,
+    setUserRole,
     changeTheme,
     themValue,
     userRole,
     url,
+    userRouteError,
+    setUserRouteError,
+
+    setLoading,
   } = useContext(AuthContext);
   const [showDropdrownMenuw, setShowDropdrownMenuw] = useState(false);
+  const [databaseUser, setDatabaseUser] = useState("");
 
-  const handelUserLogOut = () => {
-    handelSingOutUser()
-      .then(() => {
-        localStorage.removeItem("access_Token");
-        console.log("out");
-        toast.success("🦄 Sing Out successful!", {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-
-        localStorage.removeItem("access_Token");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
   // requestEmployer
   const requestEmployer = () => {
     fetch(`${url}request-employer`, {
@@ -69,7 +52,50 @@ const NavBar = () => {
         }
       });
   };
-  console.log(userRole);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`${url}database-user`, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${localStorage.getItem("access_Token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((role) => {
+        console.log(role?.role);
+        if (role?.role) {
+          setDatabaseUser(role?.role);
+          setUserRole(role?.role);
+        }
+        setLoading(false);
+      });
+  }, [user, userRouteError, databaseUser]);
+  console.log(databaseUser);
+
+  const handelUserLogOut = () => {
+    handelSingOutUser()
+      .then(() => {
+        localStorage.removeItem("access_Token");
+        console.log("out");
+        toast.success("🦄 Sing Out successful!", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+
+        localStorage.removeItem("access_Token");
+        setUserRole("user");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div id="nav_bar_wraper relative">
       <Navbar fluid={true} rounded={false}>
@@ -85,31 +111,97 @@ const NavBar = () => {
           <Navbar.Link href="/" active={true}>
             Home
           </Navbar.Link>
-          {userRole === "admin" && (
+
+          {databaseUser ? (
             <>
-              <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
-              <Navbar.Link href="/Interview-Mont">Interview Mont</Navbar.Link>
-              <Navbar.Link href="/all-user">All User</Navbar.Link>
+              {databaseUser && databaseUser === "admin" && (
+                <>
+                  <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
+                  <Navbar.Link href="/Interview-Mont">
+                    Interview Mont
+                  </Navbar.Link>
+                  <Navbar.Link href="/all-user">All User</Navbar.Link>
+                  <Navbar.Link href="/select-all-interview-user">
+                    Select All Interview User
+                  </Navbar.Link>
+                </>
+              )}
             </>
-          )}
-          {userRole === "employer" && (
+          ) : (
             <>
-              <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
-              <Navbar.Link href="/Interview-Mont">Interview Mont</Navbar.Link>
+              {userRole && userRole === "admin" && (
+                <>
+                  <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
+                  <Navbar.Link href="/Interview-Mont">
+                    Interview Mont
+                  </Navbar.Link>
+                  <Navbar.Link href="/all-user">All User</Navbar.Link>
+                  <Navbar.Link href="/select-all-interview-user">
+                    Select All Interview User
+                  </Navbar.Link>
+                </>
+              )}
             </>
           )}
 
-          {userRole === "user" && (
+          {databaseUser ? (
             <>
-              <Navbar.Link href="/interview_schedule">
-                Interview Schedule
-              </Navbar.Link>
-              <Navbar.Link href="/booking-interview">
-                Booking Interview
-              </Navbar.Link>
+              {databaseUser && databaseUser === "employer" && (
+                <>
+                  <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
+                  <Navbar.Link href="/Interview-Mont">
+                    Interview Mont
+                  </Navbar.Link>
+                  <Navbar.Link href="/select-all-interview-user">
+                    Select All Interview User
+                  </Navbar.Link>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {userRole && userRole === "employer" && (
+                <>
+                  <Navbar.Link href="/dashboard">Dashboard</Navbar.Link>
+                  <Navbar.Link href="/Interview-Mont">
+                    Interview Mont
+                  </Navbar.Link>
+                  <Navbar.Link href="/select-all-interview-user">
+                    Select All Interview User
+                  </Navbar.Link>
+                </>
+              )}
             </>
           )}
-          {userRole === "requestEmployer" && (
+          {databaseUser ? (
+            <>
+              {databaseUser && databaseUser === "user" && (
+                <>
+                  <Navbar.Link href="/interview_schedule">
+                    Interview Schedule
+                  </Navbar.Link>
+                  <Navbar.Link href="/booking-interview">
+                    Booking Interview
+                  </Navbar.Link>
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {userRole && userRole === "user" && (
+                <>
+                  <Navbar.Link href="/interview_schedule">
+                    Interview Schedule
+                  </Navbar.Link>
+                  <Navbar.Link href="/booking-interview">
+                    Booking Interview
+                  </Navbar.Link>
+                </>
+              )}
+            </>
+          )}
+
+          {databaseUser && databaseUser === "requestEmployer" && (
             <>
               <Navbar.Link href="/interview_schedule">
                 Interview Schedule
@@ -151,7 +243,7 @@ const NavBar = () => {
                     {user ? user?.email : "mam@gmail"}
                   </span>
                 </Dropdown.Header>
-                {userRole === "user" && (
+                {databaseUser === "user" && (
                   <Dropdown.Item onClick={() => requestEmployer()}>
                     Request Employer
                   </Dropdown.Item>

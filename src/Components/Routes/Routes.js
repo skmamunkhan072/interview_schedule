@@ -13,6 +13,7 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import AdminRoute from "./PrivateRoute/AdminRoute/AdminRoute";
 import EmployerRoute from "./EmployerRoute/EmployerRoute";
 import UserRoute from "./UserRoute/UserRoute";
+import SelectAllInterviewUser from "../Pages/SelectAllInterviewUser/SelectAllInterviewUser";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,16 @@ export const router = createBrowserRouter([
           <PrivateRoute>
             <EmployerRoute>
               <AllInterviewMont />
+            </EmployerRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/select-all-interview-user",
+        element: (
+          <PrivateRoute>
+            <EmployerRoute>
+              <SelectAllInterviewUser />
             </EmployerRoute>
           </PrivateRoute>
         ),

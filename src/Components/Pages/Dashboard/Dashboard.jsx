@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [allInterviewScheduleDate, setAllInterviewScheduleDate] = useState([]);
   const [monthError, setMonthErrore] = useState("");
   const navigate = useNavigate();
+  // const [currentMont, setCurrentMont] = useState("false");
 
   // All intterview Time Slode data get
   useEffect(() => {
@@ -50,6 +51,10 @@ const Dashboard = () => {
 
     for (const day of selectedDates) {
       const singleDate = format(day, "PP");
+      // if (currentMont) {
+      //   setCurrentMont(allDate);
+      //   console.log(singleDate);
+      // }
       allDate.push(singleDate);
     }
     setAllSelectedDates(allDate);
@@ -76,7 +81,7 @@ const Dashboard = () => {
     //   });
   };
 
-  console.log(AllselectedDates);
+  // console.log(currentMont);
 
   // All Time zoon
   const timeZoon = [
@@ -92,7 +97,11 @@ const Dashboard = () => {
     const form = e.target;
     const AddTitle = form.AddTitle.value;
     const MeetLink = form.MeetLink.value;
-    const currentMont = document.getElementById("react-day-picker-2").innerText;
+    const currentMontIdName = document
+      .getElementsByClassName("rdp-caption_label")[0]
+      .getAttribute("id");
+    const currentMont = document.getElementById(currentMontIdName).innerText;
+    console.log(currentMont);
 
     fetch(`${url}all-day-time-slode`)
       .then((res) => res.json())

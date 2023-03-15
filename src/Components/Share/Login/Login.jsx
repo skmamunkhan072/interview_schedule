@@ -11,8 +11,10 @@ const Login = () => {
     loading,
     setLoading,
     handelLoginUser,
-    handelGoogleSingUpUser,
     url,
+    userRouteError,
+    setUserRouteError,
+    setDatabaseUser,
     setUserRole,
   } = useContext(AuthContext);
   const [errorMessage, SetErrorMessage] = useState("");
@@ -21,7 +23,7 @@ const Login = () => {
   const [token] = useToken(email);
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  setUserRole("user");
+
   // handelUserLogin
   const handelUserLogin = (e) => {
     e.preventDefault();
@@ -32,6 +34,23 @@ const Login = () => {
     handelLoginUser(email, password)
       .then((result) => {
         setEmail(email);
+
+        fetch(`${url}database-user`, {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `bearer ${localStorage.getItem("access_Token")}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((role) => {
+            console.log(role?.role);
+            if (role?.role) {
+              setDatabaseUser(role?.role);
+              setUserRole(role?.role);
+            }
+            setLoading(false);
+          });
+        // setUserRouteError(!userRouteError);
         toast.success("🦄 Login successful!", {
           position: "top-center",
           autoClose: 5000,
@@ -42,7 +61,6 @@ const Login = () => {
           progress: undefined,
           theme: "dark",
         });
-        setUserRole("user");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -66,6 +84,20 @@ const Login = () => {
   };
 
   if (token) {
+    fetch(`${url}database-user`, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${localStorage.getItem("access_Token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((role) => {
+        console.log(role?.role);
+        if (role?.role) {
+          setUserRole(role?.role);
+        }
+        setLoading(false);
+      });
     navigate(from, { replace: true });
   }
 

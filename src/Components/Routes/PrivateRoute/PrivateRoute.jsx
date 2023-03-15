@@ -9,21 +9,6 @@ const PrivateRoute = ({ children }) => {
   const location = useLocation();
 
   // Database User
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${url}database-user`, {
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `bearer ${localStorage.getItem("access_Token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((role) => {
-        console.log(role?.role);
-        setUserRole(role?.role);
-        setLoading(false);
-      });
-  }, [user]);
 
   // loading
   if (loading) {

@@ -13,6 +13,9 @@ const SingUp = () => {
     handelUserCreate,
     updateUser,
     url,
+    userRouteError,
+    setUserRouteError,
+    setDatabaseUser,
     setUserRole,
   } = useContext(AuthContext);
   const [errorMessage, SetErrorMessage] = useState("");
@@ -21,7 +24,7 @@ const SingUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  setUserRole("user");
+
   //   handel singup
   const handelUsersingUp = (e) => {
     e.preventDefault();
@@ -54,6 +57,7 @@ const SingUp = () => {
                 updateUser(updeInfo)
                   .then((userCredential) => {
                     console.log(user);
+                    // setUserRouteError(!userRouteError);
                     toast.success("🦄 Sing up successful!", {
                       position: "top-center",
                       autoClose: 2000,
@@ -64,7 +68,6 @@ const SingUp = () => {
                       progress: undefined,
                       theme: "dark",
                     });
-                    setUserRole("user");
                   })
                   .catch((error) => {
                     const errorMessage = error.message;
@@ -107,6 +110,21 @@ const SingUp = () => {
 
   // navigate
   if (token) {
+    fetch(`${url}database-user`, {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `bearer ${localStorage.getItem("access_Token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((role) => {
+        console.log(role?.role);
+        if (role?.role) {
+          setDatabaseUser(role?.role);
+          setUserRole(role?.role);
+        }
+        setLoading(false);
+      });
     navigate(from, { replace: true });
   }
 
